@@ -26,10 +26,8 @@ promises.push(create('docker', ['build', '-t', 'backend:v1', './backend']))
 // this will provide an error if already created
 // however, you only need to rebuild image in order to see the change
 Promise.all(promises).then((codes) => {
-  console.log('done');
-  // return create('kubectl', ['create', '-f', 'deployment.yaml']);
+  return create('kubectl', ['create', '-f', 'deployment.yaml']);
+}).then((code) => {
+  console.log('Yay!');
+  // return create('kubectl', ['create', '-f', 'service.yaml']);
 })
-// .then((code) => {
-//   console.log('Yay!');
-//   // return create('kubectl', ['create', '-f', 'service.yaml']);
-// })

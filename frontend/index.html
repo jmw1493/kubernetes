@@ -39,6 +39,7 @@
     fetch(url).then((res) => {
       return res.json();
     }).then((json) => {
+      console.log(json);
       json.todo.forEach((item) => {
         const li = document.createElement('li');
         li.append(item);
