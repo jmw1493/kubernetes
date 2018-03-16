@@ -1,13 +1,11 @@
 const express = require('express');
 const app = express();
-const path = require('path');
-const request = require('request');
 
 app.get('/', (req, res, next) => {
-  res.sendFile(path.resolve(__dirname, './index.html'))
+  res.send('Hello, World!')
 })
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log('Server listening on port', PORT);
 })

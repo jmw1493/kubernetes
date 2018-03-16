@@ -20,7 +20,7 @@ const create = (file, arr) => {
 }
 
 const promises = [];
-promises.push(create('docker', ['build', '-t', 'frontend:v1', './frontend']))
+promises.push(create('docker', ['build', '-t', 'message:v1', './message']))
 promises.push(create('docker', ['build', '-t', 'backend:v1', './backend']))
 
 // this will provide an error if already created
@@ -29,5 +29,4 @@ Promise.all(promises).then((codes) => {
   return create('kubectl', ['create', '-f', 'deployment.yaml']);
 }).then((code) => {
   console.log('Yay!');
-  // return create('kubectl', ['create', '-f', 'service.yaml']);
 })
