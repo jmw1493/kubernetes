@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   # create Deployment named server-deployment
-  name: my-deployment
+  name: frontend-deployment
 spec:
   # create three replicated Pods
   replicas: 1
@@ -24,6 +24,29 @@ spec:
         image: frontend:v1
         ports:
           - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # create Deployment named server-deployment
+  name: backend-deployment
+spec:
+  # create three replicated Pods
+  replicas: 1
+  # finds which files Pods to manage
+  # select on one label defined in Pod template
+  selector:
+    matchLabels:
+      app: my-deployment
+  # pod template
+  # pods are labeled app: server
+  # run server image if not local
+  template:
+    metadata:
+      labels:
+        app: my-deployment
+    spec:
+      containers:
       - name: backend
         image: backend:v1
         ports:
@@ -36,7 +59,7 @@ metadata:
   labels:
     run: my-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: my-deployment
   ports:

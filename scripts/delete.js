@@ -1,6 +1,6 @@
 const { spawn, exec } = require('child_process');
 
-const create = (file, arr) => {
+const remove = (file, arr) => {
   return new Promise((resolve, reject) => {
     const deploy = spawn(file, arr);
 
@@ -20,16 +20,13 @@ const create = (file, arr) => {
 }
 
 const promises = [];
-promises.push(create('docker', ['build', '-t', 'frontend:v1', './frontend']))
-promises.push(create('docker', ['build', '-t', 'backend:v1', './backend']))
+promises.push(remove('kubectl', ['delete', 'deployment', 'frontend-deployment']))
+promises.push(remove('kubectl', ['delete', 'deployment', 'backend-deployment']))
 
 // this will provide an error if already created
 // however, you only need to rebuild image in order to see the change
 Promise.all(promises).then((codes) => {
-  console.log('done');
-  // return create('kubectl', ['create', '-f', 'deployment.yaml']);
+  return remove('kubectl', ['delete', 'service', 'my-service'])
+}).then((code) => {
+  console.log('Yay!');
 })
-// .then((code) => {
-//   console.log('Yay!');
-//   // return create('kubectl', ['create', '-f', 'service.yaml']);
-// })

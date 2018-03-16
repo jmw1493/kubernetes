@@ -4,7 +4,8 @@ const path = require('path');
 const request = require('request');
 
 app.get('/', (req, res, next) => {
-  res.sendFile(path.resolve(__dirname, './index.html'))
+  res.send('hello!');
+  // res.sendFile(path.resolve(__dirname, './index.html'))
   // console.log("hello");
   // request.get('http://10.107.113.141:3000', (err, http, body) => {
   //   console.log(err, http, body);
