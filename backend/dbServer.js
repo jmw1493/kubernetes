@@ -12,7 +12,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', (req, res) => {
-  res.send(JSON.stringify(memory));
+  res.json(memory);
 });
 
 app.post('/', (req, res, next) => {
