@@ -2,6 +2,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const request = require('request');
+const socket = require('socket.io');
+
+const PORT = process.env.PORT || 8080;
+const server = app.listen(PORT, () => {
+  console.log('Server listening on port', PORT);
+});
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, './index.html'))
@@ -11,9 +17,19 @@ app.get('/', (req, res, next) => {
   //   res.send(body);
   //   // res.sendFile(path.resolve(__dirname, './index.html'))
   // })
-})
+});
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log('Server listening on port', PORT);
-})
+const io = socket(server);
+
+io.on('connection', (socket) => {
+  console.log('made socket connection');
+  // io.sockets.on('disconnect', function() {
+  //   io.sockets.disconnect();
+  //   io.sockets.close();
+  // });
+  setTimeout(() => {
+    io.sockets.emit('refresh-page', {
+      message: 'I\'m a socket message, yo'
+    });
+  }, 5000);
+});

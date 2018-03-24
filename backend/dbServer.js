@@ -11,8 +11,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/', (req, res, next) => {
-  res.json(memory);
+app.get('/', (req, res) => {
+  res.send(JSON.stringify(memory));
 });
 
 app.post('/', (req, res, next) => {
@@ -23,4 +23,4 @@ app.post('/', (req, res, next) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('Server listening on port', PORT);
-})
+});

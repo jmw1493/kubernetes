@@ -22,6 +22,7 @@ const create = (file, arr) => {
 const promises = [];
 promises.push(create('docker', ['build', '-t', 'frontend:v1', './frontend']))
 promises.push(create('docker', ['build', '-t', 'backend:v1', './backend']))
+// promises.push(create('docker', ['build', '-t', 'socket-backend:v1', './socket-backend']))
 
 // this will provide an error if already created
 // however, you only need to rebuild image in order to see the change
@@ -30,4 +31,4 @@ Promise.all(promises).then((codes) => {
 }).then((code) => {
   console.log('Yay!');
   // return create('kubectl', ['create', '-f', 'service.yaml']);
-})
+});

@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>To Do</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
   </head>
   <body>
     <form>
@@ -10,13 +11,34 @@
     </form>
     <button id="submit">click</button>
     <ol id="add"></ol>
-  </body>
   <script>
-    const url = 'http://192.168.64.6:30025';
+    const url = 'http://192.168.64.23:30025'; 
+    // const initUrl = location.href.split('');
+    // const baseUrl = initUrl.slice(0, initUrl.length -2);
+    // const url = baseUrl.concat('5').join('');
+    // const socketUrl = baseUrl.concat('7').join('');
+    // const socket = io.connect(location.href);
+    // const socket = io();
+    const socket = io.connect(location.href, {transports: ['websocket'], upgrade: false, forceNew: true, reconnection: true, reconnectionDelay: 1000,
+    reconnectionDelayMax : 5000, reconnectionAttempts: 99999});
     const button = document.getElementById('submit');
     const add = document.getElementById('add');
     const input = document.getElementById('input');
 
+    // fetch items from memory
+    fetch(url).then((res) => {
+      return res.json();
+    }).then((json) => {
+      console.log(json);
+      json.todo.forEach((item) => {
+        const li = document.createElement('li');
+        li.append(item);
+        add.append(li);
+      });
+    }).catch((err) => {
+      console.log('fetch backend failed:....   ' + err);
+    });
+    
     // add item to todo list
     button.addEventListener('click', (e) => {
       fetch(url, {
@@ -29,22 +51,36 @@
         return res.json();
       }).then(json => {
         const li = document.createElement('li');
+        // const liTwo = document.createElement('li');
         li.append(input.value);
+        // liTwo.append(input.value + ' second li');
         add.append(li);
+        // add.append(liTwo);
         input.value = '';
-      })
-    })
+      });
+    });
 
-    // fetch items from memory
-    fetch(url).then((res) => {
-      return res.json();
-    }).then((json) => {
-      console.log(json);
-      json.todo.forEach((item) => {
-        const li = document.createElement('li');
-        li.append(item);
-        add.append(li);
-      })
-    })
+    // setTimeout(() => {
+      //socketUrl
+      // const socket = io.connect(location.href, {transports: ['websocket'], forceNew: true});
+
+        socket.on('refresh-page', (data) => {
+          console.log('client socket receiving something');
+          // socket.emit('disconnect', {
+          //   message: 'disconnect socket'
+          // });
+          // setTimeout(() => {
+            location.reload(true);
+          // }, 1000)
+        // const socketli = document.createElement('li');
+        // socketli.append(data.message);
+        // add.appendChild(socketli);
+      });
+    // }, 1000)
+    
+    // upgrade: false, forceNew: true, reconnection: true, reconnectionDelay: 1000,
+    // reconnectionDelayMax : 5000, reconnectionAttempts: 99999
+    
   </script>
+  </body>
 </html>
